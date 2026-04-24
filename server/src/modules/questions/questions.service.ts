@@ -126,7 +126,7 @@ export async function createQuestion(input: CreateQuestionInput): Promise<Questi
   const result = await query<Question>(
     `
       INSERT INTO questions (type, stem, options, correct_answer, score, created_by)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      VALUES ($1, $2, $3::jsonb, $4, $5, $6)
       RETURNING id, type, stem, options, correct_answer, score, created_by, created_at, updated_at
     `,
     [
@@ -190,7 +190,7 @@ export async function updateQuestion(
       SET
         type = $1,
         stem = $2,
-        options = $3,
+        options = $3::jsonb,
         correct_answer = $4,
         score = $5
       WHERE id = $6
