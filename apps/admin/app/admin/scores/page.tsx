@@ -53,7 +53,7 @@ export default function AdminScoresPage() {
               { label: "平均分", value: stats.average_score },
               { label: "通过率", value: `${(stats.pass_rate * 100).toFixed(2)}%` }
             ].map((item) => (
-              <Card key={item.label} className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+              <Card key={item.label} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
                 <CardContent className="p-6">
                   <p className="text-sm text-slate-500">{item.label}</p>
                   <p className="mt-2 text-3xl font-semibold text-slate-950">{item.value}</p>
@@ -62,7 +62,7 @@ export default function AdminScoresPage() {
             ))}
           </div>
 
-          <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+          <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-2xl">
                 <CircleAlert className="h-5 w-5 text-amber-500" />

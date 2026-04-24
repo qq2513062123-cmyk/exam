@@ -31,7 +31,7 @@ export default function AdminHomePage() {
           { label: "待复核", value: stats?.pending_review_count ?? "-", icon: ShieldCheck },
           { label: "参加学生数", value: stats?.unique_student_count ?? "-", icon: FileQuestion }
         ].map((item) => (
-          <Card key={item.label} className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+          <Card key={item.label} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
             <CardContent className="flex items-start justify-between p-6">
               <div className="space-y-2">
                 <p className="text-sm text-slate-500">{item.label}</p>
@@ -49,20 +49,20 @@ export default function AdminHomePage() {
         {[
           {
             title: "题库管理",
-            description: "维护题目内容，覆盖单选、判断和简答三类题型。"
+            description: "维护单选题、判断题和简答题，让题库内容始终保持可控。"
           },
           {
             title: "考试管理",
-            description: "创建考试、设置状态、绑定题目，控制考试内容与发布节奏。"
+            description: "创建考试、设置状态、绑定题目，把题库内容组织成正式考试。"
           },
           {
             title: "提交与复核",
-            description: "查看学生提交情况，对简答题进行人工评分并更新最终成绩。"
+            description: "查看学生提交情况，对简答题进行人工评分，并跟进最终成绩。"
           }
         ].map((item) => (
-          <Card key={item.title} className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+          <Card key={item.title} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
             <CardContent className="space-y-3 p-6">
-              <h3 className="text-xl font-semibold text-slate-950">{item.title}</h3>
+              <h3 className="text-2xl font-semibold tracking-tight text-slate-950">{item.title}</h3>
               <p className="text-sm leading-7 text-slate-600">{item.description}</p>
             </CardContent>
           </Card>

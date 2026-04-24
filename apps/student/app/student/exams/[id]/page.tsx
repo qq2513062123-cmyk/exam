@@ -140,7 +140,7 @@ function QuestionInput({
       value={value}
       disabled={disabled}
       onChange={(event: ChangeEvent<HTMLTextAreaElement>) => onChange(event.target.value)}
-      className="mt-5 min-h-36"
+      className="mt-5 min-h-40 rounded-2xl"
       placeholder="请输入简答题答案"
     />
   );
@@ -257,21 +257,31 @@ export default function StudentExamPage() {
         description={exam.description || "请在规定时间内完成作答，并在确认后正式提交试卷。"}
       />
 
-      <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
-        <CardContent className="grid gap-4 p-6 md:grid-cols-[1fr,auto] md:items-center">
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600">
-            <span className="inline-flex items-center gap-2">
-              <Clock3 className="h-4 w-4 text-blue-700" />
-              时长 {exam.duration_minutes} 分钟
-            </span>
-            <span className="inline-flex items-center gap-2">
-              <FileText className="h-4 w-4 text-blue-700" />
-              共 {exam.questions.length} 题
-            </span>
-          </div>
-          <Badge variant={statusVariant(submission?.status)}>{submission?.status || "unknown"}</Badge>
-        </CardContent>
-      </Card>
+      <div className="grid gap-4 xl:grid-cols-[1fr,0.9fr]">
+        <Card className="rounded-[30px] border-slate-200 bg-white/90 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+          <CardContent className="flex flex-wrap items-center justify-between gap-4 p-6">
+            <div className="flex flex-wrap items-center gap-5 text-sm text-slate-600">
+              <span className="inline-flex items-center gap-2">
+                <Clock3 className="h-4 w-4 text-blue-700" />
+                时长 {exam.duration_minutes} 分钟
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <FileText className="h-4 w-4 text-blue-700" />
+                共 {exam.questions.length} 题
+              </span>
+            </div>
+            <Badge variant={statusVariant(submission?.status)}>{submission?.status || "unknown"}</Badge>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[30px] border-slate-200 bg-white/90 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+          <CardContent className="p-6 text-sm leading-7 text-slate-600">
+            {canEdit
+              ? "你可以先保存当前答案，再在确认无误后正式提交试卷。"
+              : `当前试卷状态为 ${submission?.status || "unknown"}，页面仅显示答案内容，不再允许修改。`}
+          </CardContent>
+        </Card>
+      </div>
 
       {message ? <Alert tone="success">{message}</Alert> : null}
       {error ? <Alert>{error}</Alert> : null}
@@ -280,14 +290,14 @@ export default function StudentExamPage() {
         <Alert tone="info">
           <div className="flex items-start gap-2">
             <AlertTriangle className="mt-0.5 h-4 w-4" />
-            <span>当前状态为 {submission.status}，页面仅展示答案，不能继续修改或提交。</span>
+            <span>当前试卷已锁定，你可以查看答案和状态，但不能再修改或重新提交。</span>
           </div>
         </Alert>
       ) : null}
 
       <div className="space-y-5">
         {exam.questions.map((question, index) => (
-          <Card key={question.question_id} className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+          <Card key={question.question_id} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
             <CardContent className="p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="space-y-3">
@@ -295,10 +305,10 @@ export default function StudentExamPage() {
                     <Badge variant="secondary">第 {index + 1} 题</Badge>
                     <Badge variant="outline">{question.type}</Badge>
                   </div>
-                  <h2 className="text-xl font-semibold text-slate-950">{question.stem}</h2>
+                  <h2 className="text-2xl font-semibold tracking-tight text-slate-950">{question.stem}</h2>
                 </div>
 
-                <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">
+                <div className="rounded-[22px] border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700">
                   {question.score} 分
                 </div>
               </div>
@@ -316,10 +326,10 @@ export default function StudentExamPage() {
         ))}
       </div>
 
-      <Card className="sticky bottom-4 rounded-[28px] border-slate-200 bg-white/95 shadow-lg backdrop-blur">
+      <Card className="sticky bottom-4 rounded-[30px] border-slate-200 bg-white/95 shadow-[0_18px_50px_rgba(15,23,42,0.12)] backdrop-blur">
         <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-slate-500">
-            {canEdit ? "你可以先保存答案，再确认提交试卷。" : "当前试卷已锁定，不能继续编辑。"}
+            {canEdit ? "可以先保存答案，再正式提交试卷。" : "当前试卷已锁定，不能继续编辑。"}
           </p>
           <div className="flex gap-3">
             <Button variant="outline" onClick={handleSave} disabled={!canEdit || saving || submitting}>

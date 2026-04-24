@@ -164,7 +164,7 @@ export default function AdminQuestionsPage() {
       {formError ? <Alert>{formError}</Alert> : null}
 
       <div className="grid gap-6 xl:grid-cols-[0.95fr,1.05fr]">
-        <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <FileQuestion className="h-5 w-5 text-blue-700" />
@@ -180,7 +180,7 @@ export default function AdminQuestionsPage() {
                     id="type"
                     value={form.type}
                     onChange={(event) => setForm({ ...form, type: event.target.value as QuestionType })}
-                    className="flex h-10 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+                    className="flex h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-900"
                   >
                     <option value="single_choice">single_choice</option>
                     <option value="true_false">true_false</option>
@@ -190,7 +190,13 @@ export default function AdminQuestionsPage() {
 
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="stem">题干</Label>
-                  <Input id="stem" value={form.stem} onChange={(event) => setForm({ ...form, stem: event.target.value })} required />
+                  <Input
+                    id="stem"
+                    value={form.stem}
+                    onChange={(event) => setForm({ ...form, stem: event.target.value })}
+                    required
+                    className="h-12 rounded-2xl border-slate-200 bg-slate-50 px-4"
+                  />
                 </div>
               </div>
 
@@ -200,6 +206,7 @@ export default function AdminQuestionsPage() {
                   id="optionsText"
                   value={form.optionsText}
                   onChange={(event) => setForm({ ...form, optionsText: event.target.value })}
+                  className="rounded-2xl border-slate-200 bg-slate-50"
                 />
               </div>
 
@@ -210,6 +217,7 @@ export default function AdminQuestionsPage() {
                     id="correct_answer"
                     value={form.correct_answer}
                     onChange={(event) => setForm({ ...form, correct_answer: event.target.value })}
+                    className="h-12 rounded-2xl border-slate-200 bg-slate-50 px-4"
                   />
                 </div>
 
@@ -222,6 +230,7 @@ export default function AdminQuestionsPage() {
                     value={form.score}
                     onChange={(event) => setForm({ ...form, score: event.target.value })}
                     required
+                    className="h-12 rounded-2xl border-slate-200 bg-slate-50 px-4"
                   />
                 </div>
               </div>
@@ -247,7 +256,7 @@ export default function AdminQuestionsPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardHeader className="gap-4">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <CardTitle className="text-2xl">题目列表</CardTitle>
@@ -257,7 +266,7 @@ export default function AdminQuestionsPage() {
                   value={keyword}
                   onChange={(event) => setKeyword(event.target.value)}
                   placeholder="按题干关键词搜索"
-                  className="pl-9"
+                  className="h-12 rounded-2xl border-slate-200 bg-slate-50 pl-10"
                 />
               </div>
             </div>
@@ -287,7 +296,6 @@ export default function AdminQuestionsPage() {
                       <TableHead className="w-[120px]">操作</TableHead>
                     </TableRow>
                   </TableHeader>
-
                   <TableBody>
                     {pagedQuestions.map((question) => (
                       <TableRow key={question.id}>

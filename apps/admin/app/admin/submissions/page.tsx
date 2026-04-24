@@ -172,7 +172,7 @@ export default function AdminSubmissionsPage() {
       {message ? <Alert tone="success">{message}</Alert> : null}
 
       <div className="grid gap-6 xl:grid-cols-[1.08fr,0.92fr]">
-        <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardHeader className="gap-4">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <CardTitle className="flex items-center gap-2 text-2xl">
@@ -220,7 +220,6 @@ export default function AdminSubmissionsPage() {
                       <TableHead className="w-[120px]">操作</TableHead>
                     </TableRow>
                   </TableHeader>
-
                   <TableBody>
                     {pagedSubmissions.map((submission) => (
                       <TableRow key={submission.id}>
@@ -246,11 +245,10 @@ export default function AdminSubmissionsPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardHeader>
             <CardTitle className="text-2xl">提交详情 / 复核</CardTitle>
           </CardHeader>
-
           <CardContent className="space-y-4">
             {detailError ? <Alert>{detailError}</Alert> : null}
             {detailLoading ? <LoadingState title="正在加载详情" description="答案和复核表单马上展示出来。" /> : null}
@@ -260,7 +258,7 @@ export default function AdminSubmissionsPage() {
 
             {selected ? (
               <>
-                <div className="rounded-3xl bg-slate-50 p-4">
+                <div className="rounded-[24px] border border-slate-200 bg-slate-50 p-4">
                   <p className="font-medium text-slate-950">{selected.exam.title}</p>
                   <p className="mt-1 text-sm text-slate-600">学生：{selected.student.name || selected.student.email}</p>
                   <div className="mt-3">
@@ -303,6 +301,7 @@ export default function AdminSubmissionsPage() {
                                     }
                                   })
                                 }
+                                className="h-12 rounded-2xl border-slate-200 bg-white px-4"
                               />
                             </div>
 
@@ -320,6 +319,7 @@ export default function AdminSubmissionsPage() {
                                     }
                                   })
                                 }
+                                className="h-12 rounded-2xl border-slate-200 bg-white px-4"
                               />
                             </div>
                           </div>

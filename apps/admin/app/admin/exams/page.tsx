@@ -147,7 +147,7 @@ export default function AdminExamsPage() {
       {error ? <Alert>{error}</Alert> : null}
 
       <div className="grid gap-6 xl:grid-cols-[1fr,0.9fr]">
-        <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <CalendarRange className="h-5 w-5 text-blue-700" />
@@ -159,7 +159,13 @@ export default function AdminExamsPage() {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="title">标题</Label>
-                  <Input id="title" value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} required />
+                  <Input
+                    id="title"
+                    value={form.title}
+                    onChange={(event) => setForm({ ...form, title: event.target.value })}
+                    required
+                    className="h-12 rounded-2xl border-slate-200 bg-slate-50 px-4"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="duration">时长（分钟）</Label>
@@ -170,13 +176,19 @@ export default function AdminExamsPage() {
                     value={form.duration_minutes}
                     onChange={(event) => setForm({ ...form, duration_minutes: event.target.value })}
                     required
+                    className="h-12 rounded-2xl border-slate-200 bg-slate-50 px-4"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="description">描述</Label>
-                <Textarea id="description" value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} />
+                <Textarea
+                  id="description"
+                  value={form.description}
+                  onChange={(event) => setForm({ ...form, description: event.target.value })}
+                  className="rounded-2xl border-slate-200 bg-slate-50"
+                />
               </div>
 
               <div className="space-y-2">
@@ -185,7 +197,7 @@ export default function AdminExamsPage() {
                   id="status"
                   value={form.status}
                   onChange={(event) => setForm({ ...form, status: event.target.value as ExamStatus })}
-                  className="flex h-10 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm"
+                  className="flex h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm"
                 >
                   <option value="draft">draft</option>
                   <option value="published">published</option>
@@ -212,7 +224,7 @@ export default function AdminExamsPage() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <Link2 className="h-5 w-5 text-blue-700" />
@@ -226,7 +238,7 @@ export default function AdminExamsPage() {
                 id="bindExamId"
                 value={bindExamId}
                 onChange={(event) => setBindExamId(event.target.value)}
-                className="flex h-10 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm"
+                className="flex h-12 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm"
               >
                 <option value="">请选择考试</option>
                 {exams.map((exam) => (
@@ -244,6 +256,7 @@ export default function AdminExamsPage() {
                 value={bindQuestionIds}
                 onChange={(event) => setBindQuestionIds(event.target.value)}
                 placeholder="输入多个 question_id，可使用换行、空格或逗号分隔"
+                className="rounded-2xl border-slate-200 bg-slate-50"
               />
             </div>
 
@@ -265,7 +278,7 @@ export default function AdminExamsPage() {
         </Card>
       </div>
 
-      <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+      <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
         <CardHeader>
           <CardTitle className="text-2xl">考试列表</CardTitle>
         </CardHeader>

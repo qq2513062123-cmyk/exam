@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy } from "lucide-react";
+import { History, Trophy } from "lucide-react";
 
 import PageIntro from "../../../components/PageIntro";
 import { Badge } from "../../../components/ui/badge";
@@ -62,6 +62,34 @@ export default function StudentHistoryPage() {
         description="查看自己的考试提交状态、客观题得分、主观题得分以及最终总分。简答题复核完成前会显示待出分。"
       />
 
+      <div className="grid gap-4 xl:grid-cols-[1fr,1fr]">
+        <Card className="rounded-[30px] border-slate-200 bg-white/90 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+          <CardContent className="flex items-center gap-4 p-6">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-950 text-white">
+              <History className="h-6 w-6" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm text-slate-500">历史记录</p>
+              <p className="text-2xl font-semibold text-slate-950">{loading ? "-" : items.length}</p>
+              <p className="text-sm text-slate-600">你提交过的考试会按时间倒序显示在这里</p>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-[30px] border-slate-200 bg-white/90 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+          <CardContent className="flex items-center gap-4 p-6">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-700">
+              <Trophy className="h-6 w-6" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm text-slate-500">成绩说明</p>
+              <p className="text-base font-medium text-slate-900">主观题分数在人工复核完成前会显示为待出分</p>
+              <p className="text-sm text-slate-600">这是正常状态，不影响后续查看最终成绩。</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {loading ? <LoadingState title="正在加载历史成绩" description="请稍候，我们正在整理你的考试记录。" /> : null}
       {!loading && error ? <ErrorState description={error} /> : null}
       {!loading && !error && items.length === 0 ? (
@@ -69,14 +97,14 @@ export default function StudentHistoryPage() {
       ) : null}
 
       {!loading && !error && items.length > 0 ? (
-        <Card className="rounded-[28px] border-slate-200 bg-white shadow-sm">
+        <Card className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl">
               <Trophy className="h-5 w-5 text-amber-500" />
               我的考试记录
             </CardTitle>
-            <CardDescription className="text-sm leading-7">
-              主观题分数在人工复核完成前会显示为待出分，这是正常状态。
+            <CardDescription className="text-base leading-8 text-slate-600">
+              提交记录会展示考试状态、总分、客观题分和主观题分，便于你快速回看整个考试过程。
             </CardDescription>
           </CardHeader>
           <CardContent>
