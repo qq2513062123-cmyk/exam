@@ -9,7 +9,7 @@ export default function PageIntro({
 }) {
   return (
     <div className="space-y-4">
-      <div className="inline-flex items-center rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
+      <div className="inline-flex items-center rounded-full border border-slate-200 bg-white/85 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
         {eyebrow}
       </div>
       <div className="space-y-3">

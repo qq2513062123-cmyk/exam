@@ -12,8 +12,8 @@ import {
   LogOut
 } from "lucide-react";
 
-import { Button } from "./ui/button";
 import { clearAuth, getStoredUser } from "../lib/auth";
+import { Button } from "./ui/button";
 
 const navItems = [
   { href: "/admin", label: "概览", icon: LayoutPanelTop },
@@ -38,7 +38,7 @@ export default function AdminChrome({
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_28%,#f8fafc_58%,#f8fafc_100%)] lg:grid lg:grid-cols-[300px,1fr]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_28%,#f8fafc_58%,#f8fafc_100%)] lg:grid lg:grid-cols-[280px,1fr]">
       <aside className="border-b border-slate-200/70 bg-white/90 backdrop-blur lg:min-h-screen lg:border-b-0 lg:border-r">
         <div className="border-b border-slate-200/70 px-6 py-6">
           <Link href="/admin" className="flex items-center gap-3">
@@ -52,33 +52,39 @@ export default function AdminChrome({
           </Link>
         </div>
 
-        <nav className="flex gap-2 overflow-x-auto px-4 py-4 lg:block lg:space-y-2 lg:overflow-visible">
-          {navItems.map((item) => {
-            const active = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3 text-sm transition ${
-                  active
-                    ? "bg-slate-950 text-white shadow-sm"
-                    : "text-slate-600 hover:bg-white hover:text-slate-950"
-                }`}
-              >
-                <item.icon className="h-4 w-4" />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+        <div className="px-4 py-5">
+          <p className="px-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">导航</p>
+          <nav className="mt-3 flex gap-2 overflow-x-auto lg:block lg:space-y-2 lg:overflow-visible">
+            {navItems.map((item) => {
+              const active = pathname === item.href;
+
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3 text-sm transition ${
+                    active
+                      ? "bg-slate-950 text-white shadow-sm"
+                      : "text-slate-600 hover:bg-white hover:text-slate-950"
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
       </aside>
 
       <div className="min-w-0">
         <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/85 backdrop-blur">
-          <div className="flex items-center justify-between gap-4 px-6 py-4">
+          <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-6 py-4 xl:px-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">Management Workspace</p>
-              <p className="mt-1 text-sm text-slate-500">统一查看题库、考试、提交记录与统计，后台状态更清晰。</p>
+              <p className="mt-1 text-sm text-slate-500">
+                统一查看题库、考试、提交记录与统计，后台状态一目了然。
+              </p>
             </div>
 
             <div className="flex items-center gap-3">
@@ -94,7 +100,7 @@ export default function AdminChrome({
           </div>
         </header>
 
-        <main className="px-6 py-10">{children}</main>
+        <main className="mx-auto max-w-[1500px] px-6 py-8 xl:px-8">{children}</main>
       </div>
     </div>
   );

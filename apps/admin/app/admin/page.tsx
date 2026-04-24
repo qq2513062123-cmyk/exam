@@ -21,7 +21,7 @@ export default function AdminHomePage() {
       <PageIntro
         eyebrow="Dashboard"
         title="后台管理概览"
-        description="从这里快速了解考试系统当前状态，并进入题库、考试、提交记录和统计模块。"
+        description="从这里快速查看系统当前状态，并进入题库、考试、提交记录和统计模块。"
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -29,7 +29,7 @@ export default function AdminHomePage() {
           { label: "已发布考试", value: stats?.published_exam_count ?? "-", icon: BarChart3 },
           { label: "总提交数", value: stats?.submission_count ?? "-", icon: ClipboardList },
           { label: "待复核", value: stats?.pending_review_count ?? "-", icon: ShieldCheck },
-          { label: "参加学生数", value: stats?.unique_student_count ?? "-", icon: FileQuestion }
+          { label: "参与学生数", value: stats?.unique_student_count ?? "-", icon: FileQuestion }
         ].map((item) => (
           <Card key={item.label} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
             <CardContent className="flex items-start justify-between p-6">
