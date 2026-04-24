@@ -39,10 +39,10 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_48%,#eef2ff_100%)] px-4 py-8 sm:px-6">
-      <div className="mx-auto grid max-w-6xl items-center gap-6 lg:grid-cols-[1.05fr,0.95fr]">
-        <div className="rounded-[32px] border border-slate-200 bg-[#060b1f] p-8 text-white shadow-[0_30px_80px_rgba(15,23,42,0.20)] md:p-10">
-          <div className="flex min-h-[540px] flex-col justify-between gap-8">
+    <section className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_46%,#eef2ff_100%)] px-4 py-8 sm:px-6">
+      <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-6xl items-center gap-6 lg:grid-cols-[1.02fr,0.98fr]">
+        <div className="rounded-[32px] border border-slate-200 bg-[#060b1f] p-8 text-white shadow-[0_32px_80px_rgba(15,23,42,0.18)] md:p-10">
+          <div className="flex min-h-[560px] flex-col justify-between gap-10">
             <div className="space-y-6">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
                 <BookOpenCheck className="h-6 w-6" />
@@ -51,7 +51,7 @@ export default function LoginPage() {
               <div className="space-y-4">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-200">Student App</p>
                 <h1 className="max-w-lg text-4xl font-semibold leading-tight md:text-5xl">在线考试学生端</h1>
-                <p className="max-w-lg text-sm leading-7 text-slate-300 md:text-base">
+                <p className="max-w-lg text-base leading-8 text-slate-300">
                   进入考试列表、保存答案、刷新回填，并在交卷后查看自己的历史成绩。
                 </p>
               </div>
@@ -60,13 +60,18 @@ export default function LoginPage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
                 <p className="text-sm text-slate-300">保存并继续</p>
-                <p className="mt-2 text-xl font-semibold text-white">断点续答</p>
-                <p className="mt-2 text-sm leading-6 text-slate-300">已保存的答案会在刷新后自动回填，减少重复操作。</p>
+                <p className="mt-2 text-2xl font-semibold text-white">断点续答</p>
+                <p className="mt-3 text-sm leading-7 text-slate-300">
+                  已保存的答案会在刷新后自动回填，减少重复操作。
+                </p>
               </div>
+
               <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
                 <p className="text-sm text-slate-300">成绩追踪</p>
-                <p className="mt-2 text-xl font-semibold text-white">提交后可查</p>
-                <p className="mt-2 text-sm leading-6 text-slate-300">历史成绩页会展示总分、客观题分和主观题状态。</p>
+                <p className="mt-2 text-2xl font-semibold text-white">提交后可查</p>
+                <p className="mt-3 text-sm leading-7 text-slate-300">
+                  历史成绩页会展示总分、客观题分和主观题状态。
+                </p>
               </div>
             </div>
           </div>
@@ -76,7 +81,9 @@ export default function LoginPage() {
           <div className="w-full max-w-xl rounded-[32px] border border-slate-200 bg-white p-8 shadow-[0_24px_60px_rgba(15,23,42,0.10)] md:p-10">
             <div className="space-y-3">
               <h2 className="text-3xl font-semibold text-slate-950">学生登录</h2>
-              <p className="text-base leading-7 text-slate-600">使用学生账号进入考试系统，开始作答并查看历史成绩。</p>
+              <p className="text-base leading-7 text-slate-600">
+                使用学生账号进入考试系统，开始作答并查看历史成绩。
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
@@ -101,7 +108,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-base font-medium text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-base font-semibold text-white shadow-sm transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <span>{loading ? "登录中..." : "进入学生端"}</span>
                 <ArrowRight className="h-4 w-4" />
