@@ -5,27 +5,50 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 
 import { env } from "./env";
 
-const usesRemoteDatabase = !/(localhost|127\.0\.0\.1)/i.test(env.DATABASE_URL);
+function resolveSslConfig() {
+  try {
+    const url = new URL(env.DATABASE_URL);
+    const hostname = url.hostname.toLowerCase();
+
+    if (
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname.endsWith(".railway.internal")
+    ) {
+      return undefined;
+    }
+
+    if (hostname.includes("supabase.co") || hostname.includes("supabase.com")) {
+      return { rejectUnauthorized: false };
+    }
+
+    return { rejectUnauthorized: false };
+  } catch {
+    return undefined;
+  }
+}
 
 const pool = new Pool({
   connectionString: env.DATABASE_URL,
-  ssl: usesRemoteDatabase ? { rejectUnauthorized: false } : undefined,
+  ssl: resolveSslConfig(),
   connectionTimeoutMillis: 10000,
   idleTimeoutMillis: 30000
 });
+
+let setupPromise: Promise<void> | null = null;
 
 export function query<T extends QueryResultRow = QueryResultRow>(
   text: string,
   params?: unknown[]
 ): Promise<QueryResult<T>> {
-  return pool.query<T>(text, params);
+  return ensureDatabaseSetup().then(() => pool.query<T>(text, params));
 }
 
 export async function testDbConnection(): Promise<void> {
   await pool.query("SELECT 1");
 }
 
-export async function ensureDatabaseSetup(): Promise<void> {
+async function runDatabaseSetup(): Promise<void> {
   const tableCheck = await pool.query<{ exists: string | null }>(
     "SELECT to_regclass('public.profiles') AS exists"
   );
@@ -47,6 +70,17 @@ export async function ensureDatabaseSetup(): Promise<void> {
   );
 
   await pool.query(seedSql);
+}
+
+export async function ensureDatabaseSetup(): Promise<void> {
+  if (!setupPromise) {
+    setupPromise = runDatabaseSetup().catch((error) => {
+      setupPromise = null;
+      throw error;
+    });
+  }
+
+  await setupPromise;
 }
 
 export async function withTransaction<T>(
