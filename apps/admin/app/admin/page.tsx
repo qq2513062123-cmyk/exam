@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { ArrowRight, BarChart3, ClipboardList, FileQuestion, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { ArrowRight, BarChart3, ClipboardList, FileQuestion, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import PageIntro from "../../components/PageIntro";
 import { Button } from "../../components/ui/button";
@@ -28,12 +28,12 @@ export default function AdminHomePage() {
   const quickLinks = [
     {
       title: "题库管理",
-      description: "维护单选、判断与简答题，控制题库质量与可用性。",
+      description: "维护单选题、判断题和简答题，控制题库质量与可用性。",
       href: "/admin/questions"
     },
     {
       title: "考试管理",
-      description: "创建考试、设定状态、绑定题目，快速组织正式考试。",
+      description: "创建考试、设置状态、绑定题目，快速组织正式考试。",
       href: "/admin/exams"
     },
     {
@@ -51,9 +51,51 @@ export default function AdminHomePage() {
         description="从这里快速查看系统当前状态，进入题库、考试、提交记录和统计模块。"
       />
 
+      <Card className="overflow-hidden rounded-[36px] border-slate-200 bg-[#0b1220] text-white shadow-[0_28px_70px_rgba(15,23,42,0.18)]">
+        <CardContent className="grid gap-8 p-8 lg:grid-cols-[1.2fr,0.8fr] lg:p-10">
+          <div className="space-y-5">
+            <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-medium text-slate-200">
+              管理视角 / 全链路工作区
+            </span>
+            <div className="space-y-4">
+              <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
+                把题库、考试、提交和统计
+                <br />
+                收在一套后台里
+              </h2>
+              <p className="max-w-2xl text-sm leading-8 text-slate-300 md:text-base">
+                后台的重点不是堆功能，而是让你更快找到关键状态。这里保留了最常用的工作流：
+                建题、建卷、复核与统计。
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 text-sm text-slate-300">
+              <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">题库与考试统一维护</div>
+              <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">简答题复核集中处理</div>
+              <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">统计状态一屏查看</div>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            {statItems.slice(0, 2).map((item) => (
+              <div key={item.label} className="rounded-[28px] border border-white/10 bg-white/6 p-5">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm text-slate-300">{item.label}</p>
+                    <p className="mt-3 text-4xl font-semibold text-white">{item.value}</p>
+                  </div>
+                  <div className="rounded-2xl bg-white/10 p-3 text-blue-200">
+                    <item.icon className="h-5 w-5" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {statItems.map((item) => (
-          <Card key={item.label} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+          <Card key={item.label} className="rounded-[30px] border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
             <CardContent className="flex items-start justify-between p-6">
               <div className="space-y-2">
                 <p className="text-sm text-slate-500">{item.label}</p>
@@ -67,37 +109,19 @@ export default function AdminHomePage() {
         ))}
       </div>
 
-      <Card className="rounded-[32px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
-        <CardContent className="grid gap-6 p-6 lg:grid-cols-[1.2fr,0.8fr] lg:p-8">
-          <div className="space-y-4">
-            <p className="text-sm font-medium text-blue-700">管理视角</p>
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-950">把题库、考试、提交和统计收在一套后台里</h2>
-            <p className="max-w-2xl text-sm leading-8 text-slate-600">
-              后台的重点不是堆功能，而是让你更快找到关键状态。这里保留了最常用的工作流：建题、建卷、复核与统计。
-            </p>
-          </div>
-
-          <div className="flex items-start lg:justify-end">
-            <Button asChild className="h-12 rounded-2xl px-5">
-              <Link href="/admin/questions">
-                进入题库管理
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
       <div className="grid gap-4 lg:grid-cols-3">
         {quickLinks.map((item) => (
-          <Card key={item.title} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+          <Card key={item.title} className="rounded-[30px] border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
             <CardHeader className="space-y-3">
-              <CardTitle className="text-2xl tracking-tight">{item.title}</CardTitle>
+              <CardTitle className="text-2xl tracking-tight text-slate-950">{item.title}</CardTitle>
               <p className="text-sm leading-7 text-slate-600">{item.description}</p>
             </CardHeader>
             <CardContent>
               <Button asChild variant="outline" className="rounded-2xl">
-                <Link href={item.href}>进入模块</Link>
+                <Link href={item.href}>
+                  进入模块
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
               </Button>
             </CardContent>
           </Card>
