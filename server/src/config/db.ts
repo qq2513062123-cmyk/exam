@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 
 import { env } from "./env";
@@ -18,6 +21,30 @@ export function query<T extends QueryResultRow = QueryResultRow>(
 
 export async function testDbConnection(): Promise<void> {
   await pool.query("SELECT 1");
+}
+
+export async function ensureDatabaseSetup(): Promise<void> {
+  const tableCheck = await pool.query<{ exists: string | null }>(
+    "SELECT to_regclass('public.profiles') AS exists"
+  );
+
+  const profilesExists = tableCheck.rows[0]?.exists !== null;
+
+  if (!profilesExists) {
+    const migrationSql = fs.readFileSync(
+      path.resolve(process.cwd(), "src/db/migrations/001_init_schema.sql"),
+      "utf8"
+    );
+
+    await pool.query(migrationSql);
+  }
+
+  const seedSql = fs.readFileSync(
+    path.resolve(process.cwd(), "src/db/seeds/001_seed_profiles.sql"),
+    "utf8"
+  );
+
+  await pool.query(seedSql);
 }
 
 export async function withTransaction<T>(

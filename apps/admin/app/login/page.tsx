@@ -41,30 +41,30 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="min-h-screen bg-[#f3f5f7] px-4 py-6 sm:px-6">
-      <div className="mx-auto grid max-w-7xl gap-6 lg:min-h-[calc(100vh-48px)] lg:grid-cols-[1.05fr,0.95fr]">
-        <div className="rounded-[32px] bg-slate-950 p-8 text-white md:p-10">
-          <div className="flex h-full min-h-[360px] flex-col justify-between gap-10 lg:min-h-[720px]">
-            <div className="space-y-5">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
+    <section className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#f8fafc_42%,#eef2ff_100%)] px-4 py-8 sm:px-6">
+      <div className="mx-auto grid max-w-6xl gap-6 lg:min-h-[calc(100vh-64px)] lg:grid-cols-[1.1fr,0.9fr]">
+        <div className="rounded-[32px] border border-slate-200 bg-slate-950 p-8 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)] md:p-10">
+          <div className="flex h-full min-h-[320px] flex-col justify-between gap-8 lg:min-h-[560px]">
+            <div className="space-y-6">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div className="space-y-3">
                 <p className="text-sm font-semibold text-blue-200">Admin Console</p>
-                <h1 className="text-4xl font-semibold leading-tight md:text-5xl">在线考试管理后台</h1>
-                <p className="max-w-xl text-sm leading-7 text-slate-300 md:text-base">
+                <h1 className="max-w-xl text-4xl font-semibold leading-tight md:text-5xl">在线考试管理后台</h1>
+                <p className="max-w-lg text-sm leading-7 text-slate-300 md:text-base">
                   统一管理题库、考试、提交记录、人工复核与统计分析，让整个考试组织流程更可控。
                 </p>
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
                 <p className="text-sm text-slate-300">管理维度</p>
                 <p className="mt-2 text-lg font-semibold text-white">从题库到统计</p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">覆盖考试管理完整生命周期，不需要切换多个入口。</p>
               </div>
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur">
                 <p className="text-sm text-slate-300">复核能力</p>
                 <p className="mt-2 text-lg font-semibold text-white">人工评分补充</p>
                 <p className="mt-2 text-sm leading-6 text-slate-300">简答题进入待复核，支持人工评分后自动更新总分。</p>
@@ -74,14 +74,14 @@ export default function LoginPage() {
         </div>
 
         <div className="flex items-center justify-center">
-          <Card className="w-full max-w-xl rounded-[32px] border-slate-200 bg-white shadow-sm">
-            <CardHeader className="space-y-3">
+          <Card className="w-full max-w-xl rounded-[32px] border-slate-200/80 bg-white/90 shadow-[0_24px_60px_rgba(15,23,42,0.10)] backdrop-blur">
+            <CardHeader className="space-y-3 pb-4">
               <CardTitle className="text-3xl text-slate-950">管理员登录</CardTitle>
               <CardDescription className="text-base leading-7">
                 使用管理员账号进入后台，管理考试、查看提交记录并完成复核。
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-6">
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="email">邮箱</Label>
@@ -101,11 +101,15 @@ export default function LoginPage() {
 
                 {error ? <Alert>{error}</Alert> : null}
 
-                <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                <Button type="submit" className="h-12 w-full rounded-2xl text-base" size="lg" disabled={loading}>
                   {loading ? "登录中..." : "进入管理后台"}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </form>
+
+              <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm text-slate-500">
+                默认管理员账号已预填，可直接验证后台链路。
+              </div>
             </CardContent>
           </Card>
         </div>

@@ -20,5 +20,6 @@ export function errorMiddleware(
     return;
   }
 
+  console.error(err);
   sendError(res, "Internal server error", 500);
 }
