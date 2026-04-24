@@ -143,6 +143,12 @@ export function updateQuestion(id: string, input: Partial<{
   });
 }
 
+export function deleteQuestion(id: string) {
+  return request<{ question: { id: string } }>(`/admin/questions/${id}`, {
+    method: "DELETE"
+  });
+}
+
 export function listExams() {
   return request<{ exams: Exam[] }>("/admin/exams");
 }

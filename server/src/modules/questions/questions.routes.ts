@@ -13,5 +13,6 @@ router.get("/", questionsController.listQuestions);
 router.post("/", questionsController.createQuestion);
 router.get("/:id", questionsController.getQuestion);
 router.patch("/:id", questionsController.updateQuestion);
+router.delete("/:id", questionsController.deleteQuestion);
 
 export default router;

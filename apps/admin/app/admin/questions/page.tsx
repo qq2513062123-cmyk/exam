@@ -25,7 +25,7 @@ import { LoadingState } from "../../../components/ui/loading-state";
 import { Pagination } from "../../../components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../../components/ui/table";
 import { Textarea } from "../../../components/ui/textarea";
-import { createQuestion, listQuestions, Question, QuestionType, updateQuestion } from "../../../lib/api";
+import { createQuestion, deleteQuestion, listQuestions, Question, QuestionType, updateQuestion } from "../../../lib/api";
 
 type QuestionForm = {
   type: QuestionType;
@@ -392,6 +392,7 @@ export default function AdminQuestionsPage() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState("");
   const [importing, setImporting] = useState(false);
   const [importFile, setImportFile] = useState<File | null>(null);
   const [listError, setListError] = useState("");
@@ -509,6 +510,34 @@ export default function AdminQuestionsPage() {
       }
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDeleteQuestion(question: Question) {
+    const confirmed = window.confirm(`确定删除这道题吗？\n\n${question.stem}`);
+
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingId(question.id);
+    setFormError("");
+    setImportError("");
+    setMessage("");
+
+    try {
+      await deleteQuestion(question.id);
+      setMessage("题目已删除。");
+
+      if (editingId === question.id) {
+        resetForm();
+      }
+
+      await loadQuestions();
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : "删除题目失败");
+    } finally {
+      setDeletingId("");
     }
   }
 
@@ -958,20 +987,32 @@ export default function AdminQuestionsPage() {
                           <TableCell>{question.score}</TableCell>
                           <TableCell>{formatDate(question.created_at)}</TableCell>
                           <TableCell>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                setEditingId(question.id);
-                                setForm(toForm(question));
-                                setMessage("");
-                                setFormError("");
-                                setImportError("");
-                              }}
-                            >
-                              编辑
-                            </Button>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingId(question.id);
+                                  setForm(toForm(question));
+                                  setMessage("");
+                                  setFormError("");
+                                  setImportError("");
+                                }}
+                              >
+                                编辑
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                disabled={deletingId === question.id}
+                                className="border-rose-200 text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                                onClick={() => void handleDeleteQuestion(question)}
+                              >
+                                {deletingId === question.id ? "删除中..." : "删除"}
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}

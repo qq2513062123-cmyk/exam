@@ -97,3 +97,18 @@ export async function updateQuestion(
     next(error);
   }
 }
+
+export async function deleteQuestion(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const params = paramsSchema.parse(req.params);
+    const deleted = await questionsService.deleteQuestion(params.id);
+
+    sendSuccess(res, { question: deleted }, "Question deleted");
+  } catch (error) {
+    next(error);
+  }
+}

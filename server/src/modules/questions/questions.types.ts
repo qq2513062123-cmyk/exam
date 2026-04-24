@@ -28,3 +28,7 @@ export type UpdateQuestionInput = {
   correct_answer?: string | null;
   score?: number;
 };
+
+export type DeleteQuestionResult = {
+  id: string;
+};

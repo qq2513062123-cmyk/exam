@@ -2,6 +2,7 @@ import { query } from "../../config/db";
 import { AppError } from "../../utils/errors";
 import {
   CreateQuestionInput,
+  DeleteQuestionResult,
   Question,
   QuestionType,
   UpdateQuestionInput
@@ -207,4 +208,38 @@ export async function updateQuestion(
   );
 
   return result.rows[0];
+}
+
+export async function deleteQuestion(id: string): Promise<DeleteQuestionResult> {
+  await getQuestionById(id);
+
+  try {
+    const result = await query<{ id: string }>(
+      `
+        DELETE FROM questions
+        WHERE id = $1
+        RETURNING id
+      `,
+      [id]
+    );
+
+    const deleted = result.rows[0];
+
+    if (!deleted) {
+      throw new AppError("Question not found", 404);
+    }
+
+    return deleted;
+  } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "23503"
+    ) {
+      throw new AppError("该题目已被试卷使用，暂时不能删除。", 409);
+    }
+
+    throw error;
+  }
 }
