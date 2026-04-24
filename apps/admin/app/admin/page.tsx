@@ -51,32 +51,41 @@ export default function AdminHomePage() {
         description="从这里快速查看系统当前状态，进入题库、考试、提交记录和统计模块。"
       />
 
-      <Card className="overflow-hidden rounded-[36px] border-slate-200 bg-[#0b1220] text-white shadow-[0_28px_70px_rgba(15,23,42,0.18)]">
-        <CardContent className="grid gap-8 p-8 lg:grid-cols-[1.2fr,0.8fr] lg:p-10">
+      <Card className="overflow-hidden rounded-[40px] border-slate-200 bg-[#0b1220] text-white shadow-[0_28px_70px_rgba(15,23,42,0.18)]">
+        <CardContent className="grid gap-8 p-8 lg:grid-cols-[1.1fr,0.9fr] lg:p-10">
           <div className="space-y-5">
             <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-4 py-2 text-xs font-medium text-slate-200">
-              管理视角 / 全链路工作区
+              管理视角 / 全链路工作台
             </span>
+
             <div className="space-y-4">
               <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
-                把题库、考试、提交和统计
+                把题库、考试、提交与统计
                 <br />
-                收在一套后台里
+                收在一个更清楚的后台里
               </h2>
               <p className="max-w-2xl text-sm leading-8 text-slate-300 md:text-base">
                 后台的重点不是堆功能，而是让你更快找到关键状态。这里保留了最常用的工作流：
                 建题、建卷、复核与统计。
               </p>
             </div>
+
             <div className="flex flex-wrap gap-3 text-sm text-slate-300">
               <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">题库与考试统一维护</div>
               <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">简答题复核集中处理</div>
               <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">统计状态一屏查看</div>
             </div>
+
+            <Button asChild className="h-12 rounded-2xl bg-white px-5 text-slate-950 hover:bg-slate-100">
+              <Link href="/admin/questions">
+                进入题库管理
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
           </div>
 
-          <div className="grid gap-4">
-            {statItems.slice(0, 2).map((item) => (
+          <div className="grid gap-4 sm:grid-cols-2">
+            {statItems.map((item) => (
               <div key={item.label} className="rounded-[28px] border border-white/10 bg-white/6 p-5">
                 <div className="flex items-start justify-between">
                   <div>
@@ -93,25 +102,9 @@ export default function AdminHomePage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {statItems.map((item) => (
-          <Card key={item.label} className="rounded-[30px] border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
-            <CardContent className="flex items-start justify-between p-6">
-              <div className="space-y-2">
-                <p className="text-sm text-slate-500">{item.label}</p>
-                <p className="text-3xl font-semibold text-slate-950">{item.value}</p>
-              </div>
-              <div className="rounded-2xl bg-slate-50 p-3 text-blue-700">
-                <item.icon className="h-5 w-5" />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-3">
         {quickLinks.map((item) => (
-          <Card key={item.title} className="rounded-[30px] border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
+          <Card key={item.title} className="rounded-[32px] border-slate-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.06)]">
             <CardHeader className="space-y-3">
               <CardTitle className="text-2xl tracking-tight text-slate-950">{item.title}</CardTitle>
               <p className="text-sm leading-7 text-slate-600">{item.description}</p>
