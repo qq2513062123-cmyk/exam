@@ -9,15 +9,14 @@ import {
   ClipboardList,
   FileQuestion,
   LayoutPanelTop,
-  LogOut,
-  Sparkles
+  LogOut
 } from "lucide-react";
 
 import { clearAuth, getStoredUser } from "../lib/auth";
 import { Button } from "./ui/button";
 
 const navItems = [
-  { href: "/admin", label: "概览", icon: LayoutPanelTop },
+  { href: "/admin", label: "后台概览", icon: LayoutPanelTop },
   { href: "/admin/questions", label: "题库管理", icon: FileQuestion },
   { href: "/admin/exams", label: "考试管理", icon: CalendarRange },
   { href: "/admin/submissions", label: "提交记录", icon: ClipboardList },
@@ -39,91 +38,79 @@ export default function AdminChrome({
   }
 
   return (
-    <div className="min-h-screen bg-[#eef3f8] lg:grid lg:grid-cols-[320px,1fr]">
-      <aside className="border-b border-slate-800 bg-[#0a1020] text-white lg:min-h-screen lg:border-b-0 lg:border-r lg:border-slate-800/90">
-        <div className="flex h-full flex-col">
-          <div className="px-6 pb-6 pt-7">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eef4ff_28%,#f8fafc_58%,#f8fafc_100%)]">
+      <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/85 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+          <div className="flex items-center gap-4">
             <Link href="/admin" className="flex items-center gap-3">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-white shadow-inner shadow-white/10">
-                <BookOpenCheck className="h-6 w-6" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-950 text-white shadow-sm">
+                <BookOpenCheck className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-200">Admin Console</p>
-                <p className="mt-2 text-xl font-semibold text-white">在线考试管理后台</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">Admin Console</p>
+                <p className="mt-1 text-lg font-semibold text-slate-950">在线考试管理后台</p>
               </div>
             </Link>
-
-            <div className="mt-6 rounded-[28px] border border-white/10 bg-white/5 p-4">
-              <div className="flex items-center gap-3">
-                <div className="rounded-2xl bg-blue-500/10 p-2 text-blue-200">
-                  <Sparkles className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-white">管理工作台</p>
-                  <p className="mt-1 text-xs leading-6 text-slate-400">把题库、考试、复核和统计统一放进一个后台视图里。</p>
-                </div>
-              </div>
-            </div>
           </div>
 
-          <div className="px-4">
-            <p className="px-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">导航</p>
-            <nav className="mt-3 flex gap-2 overflow-x-auto lg:block lg:space-y-2 lg:overflow-visible">
-              {navItems.map((item) => {
-                const active = pathname === item.href;
+          <nav className="hidden items-center gap-2 lg:flex">
+            {navItems.map((item) => {
+              const active = pathname === item.href;
 
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3.5 text-sm font-medium transition ${
-                      active
-                        ? "bg-white text-slate-950 shadow-[0_16px_35px_rgba(15,23,42,0.30)]"
-                        : "text-slate-300 hover:bg-white/8 hover:text-white"
-                    }`}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition ${
+                    active
+                      ? "bg-slate-950 text-white shadow-sm"
+                      : "text-slate-600 hover:bg-white hover:text-slate-950"
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
 
-          <div className="mt-auto p-4">
-            <div className="rounded-[28px] border border-white/10 bg-white/5 p-4">
-              <p className="text-sm font-medium text-white">{user?.name || user?.email || "管理员"}</p>
-              <p className="mt-1 text-xs text-slate-400">admin workspace</p>
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-                className="mt-4 h-11 w-full rounded-2xl border-white/10 bg-transparent text-white hover:bg-white/10 hover:text-white"
-              >
-                <LogOut className="h-4 w-4" />
-                退出登录
-              </Button>
+          <div className="flex items-center gap-3">
+            <div className="hidden rounded-2xl border border-slate-200 bg-white/80 px-4 py-2 text-right md:block">
+              <p className="text-sm font-medium text-slate-900">{user?.name || user?.email || "管理员"}</p>
+              <p className="text-xs text-slate-500">admin</p>
             </div>
+            <Button variant="outline" onClick={handleLogout}>
+              <LogOut className="h-4 w-4" />
+              退出
+            </Button>
           </div>
         </div>
-      </aside>
 
-      <div className="min-w-0">
-        <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/88 backdrop-blur">
-          <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-4 px-8 py-5">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">Management Workspace</p>
-              <p className="mt-1 text-sm text-slate-500">统一查看题库、考试、提交记录与统计，后台状态更清晰。</p>
-            </div>
+        <div className="border-t border-slate-200/70 px-6 py-3 lg:hidden">
+          <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto">
+            {navItems.map((item) => {
+              const active = pathname === item.href;
 
-            <div className="hidden rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-right md:block">
-              <p className="text-sm font-medium text-slate-900">{user?.name || user?.email || "管理员"}</p>
-              <p className="text-xs text-slate-500">已连接工作区</p>
-            </div>
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm transition ${
+                    active
+                      ? "bg-slate-950 text-white shadow-sm"
+                      : "bg-white text-slate-600 hover:text-slate-950"
+                  }`}
+                >
+                  <item.icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
-        </header>
+        </div>
+      </header>
 
-        <main className="mx-auto max-w-[1320px] px-8 py-10">{children}</main>
-      </div>
+      <main className="mx-auto max-w-7xl px-6 py-10">{children}</main>
     </div>
   );
 }
