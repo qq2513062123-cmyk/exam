@@ -18,8 +18,8 @@ const highlights = [
   },
   {
     icon: FileText,
-    label: "提交后查看",
-    title: "成绩可追踪",
+    label: "提交后可查",
+    title: "成绩追踪",
     description: "历史成绩页会展示总分、客观题分和主观题状态。"
   }
 ];
@@ -54,7 +54,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_28%,#f8fafc_58%,#f8fafc_100%)] px-4 py-6 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_30%,#f8fafc_60%,#f8fafc_100%)] px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-7xl items-center gap-6 lg:grid-cols-[1.08fr,0.92fr]">
         <section className="relative overflow-hidden rounded-[36px] border border-slate-200/80 bg-[#060b1f] px-8 py-9 text-white shadow-[0_35px_90px_rgba(15,23,42,0.22)] sm:px-10 sm:py-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(96,165,250,0.18),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.16),transparent_30%)]" />
@@ -80,7 +80,8 @@ export default function LoginPage() {
                   更清楚的作答流程。
                 </h1>
                 <p className="max-w-2xl text-base leading-8 text-slate-300 md:text-lg">
-                  进入考试列表、保存答案、刷新回填，并在交卷后查看自己的历史成绩。界面保持克制，重点只留给真正需要的操作。
+                  进入考试列表、保存答案、刷新回填，并在交卷后查看自己的历史成绩。界面保持克制，
+                  重点只留给真正需要的操作。
                 </p>
               </div>
 
@@ -171,7 +172,9 @@ export default function LoginPage() {
                 <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-600" />
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-slate-900">测试账号已预填</p>
-                  <p className="text-sm leading-6 text-slate-600">你可以直接点击登录，验证线上作答链路是否通畅。</p>
+                  <p className="text-sm leading-6 text-slate-600">
+                    你可以直接点击登录，验证线上作答链路是否通畅。
+                  </p>
                 </div>
               </div>
             </div>

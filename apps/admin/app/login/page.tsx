@@ -54,7 +54,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_28%,#f8fafc_58%,#f8fafc_100%)] px-4 py-6 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_30%,#f8fafc_60%,#f8fafc_100%)] px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] max-w-7xl items-center gap-6 lg:grid-cols-[1.08fr,0.92fr]">
         <section className="relative overflow-hidden rounded-[36px] border border-slate-200/80 bg-[#060b1f] px-8 py-9 text-white shadow-[0_35px_90px_rgba(15,23,42,0.22)] sm:px-10 sm:py-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(96,165,250,0.18),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(59,130,246,0.16),transparent_30%)]" />
@@ -75,7 +75,7 @@ export default function LoginPage() {
                   统一管理题库、考试、提交记录、复核与统计分析
                 </span>
                 <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight md:text-6xl">
-                  更清爽的后台，
+                  更清楚的后台，
                   <br />
                   更可靠的管理入口。
                 </h1>
@@ -171,7 +171,9 @@ export default function LoginPage() {
                 <ShieldCheck className="mt-0.5 h-5 w-5 text-blue-600" />
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-slate-900">测试账号已预填</p>
-                  <p className="text-sm leading-6 text-slate-600">可以直接验证后台登录链路，确认线上环境是否已经稳定。</p>
+                  <p className="text-sm leading-6 text-slate-600">
+                    可以直接验证后台登录链路，确认线上环境已经稳定。
+                  </p>
                 </div>
               </div>
             </div>
