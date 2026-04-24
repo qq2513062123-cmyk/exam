@@ -38,7 +38,7 @@ export default function AdminChrome({
   }
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_28%,#f8fafc_58%,#f8fafc_100%)] lg:grid lg:grid-cols-[280px,1fr]">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top,#dbeafe_0%,#eff6ff_26%,#f8fafc_58%,#f8fafc_100%)] lg:grid lg:grid-cols-[292px,1fr]">
       <aside className="border-b border-slate-200/70 bg-white/90 backdrop-blur lg:min-h-screen lg:border-b-0 lg:border-r">
         <div className="border-b border-slate-200/70 px-6 py-6">
           <Link href="/admin" className="flex items-center gap-3">
@@ -62,7 +62,7 @@ export default function AdminChrome({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3 text-sm transition ${
+                  className={`flex items-center gap-3 whitespace-nowrap rounded-2xl px-4 py-3 text-sm font-medium transition ${
                     active
                       ? "bg-slate-950 text-white shadow-sm"
                       : "text-slate-600 hover:bg-white hover:text-slate-950"
@@ -78,17 +78,17 @@ export default function AdminChrome({
       </aside>
 
       <div className="min-w-0">
-        <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/85 backdrop-blur">
-          <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-6 py-4 xl:px-8">
+        <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/82 backdrop-blur">
+          <div className="mx-auto flex max-w-[1520px] items-center justify-between gap-4 px-6 py-4 xl:px-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-blue-700">Management Workspace</p>
               <p className="mt-1 text-sm text-slate-500">
-                统一查看题库、考试、提交记录与统计，后台状态一目了然。
+                统一查看题库、考试、提交记录与统计，后台状态更清晰。
               </p>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="hidden rounded-2xl border border-slate-200 bg-white/80 px-4 py-2 text-right md:block">
+              <div className="hidden rounded-2xl border border-slate-200 bg-white/85 px-4 py-2 text-right md:block">
                 <p className="text-sm font-medium text-slate-900">{user?.name || user?.email || "管理员"}</p>
                 <p className="text-xs text-slate-500">admin</p>
               </div>
@@ -100,7 +100,7 @@ export default function AdminChrome({
           </div>
         </header>
 
-        <main className="mx-auto max-w-[1500px] px-6 py-8 xl:px-8">{children}</main>
+        <main className="mx-auto max-w-[1520px] px-6 py-8 xl:px-8">{children}</main>
       </div>
     </div>
   );
