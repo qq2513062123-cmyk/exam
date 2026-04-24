@@ -53,7 +53,7 @@ export default function AdminChrome({
             </Link>
           </div>
 
-          <nav className="hidden items-center gap-2 lg:flex">
+          <nav className="flex items-center gap-2 overflow-x-auto">
             {navItems.map((item) => {
               const active = pathname === item.href;
 
@@ -83,29 +83,6 @@ export default function AdminChrome({
               <LogOut className="h-4 w-4" />
               退出
             </Button>
-          </div>
-        </div>
-
-        <div className="border-t border-slate-200/70 px-6 py-3 lg:hidden">
-          <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto">
-            {navItems.map((item) => {
-              const active = pathname === item.href;
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm transition ${
-                    active
-                      ? "bg-slate-950 text-white shadow-sm"
-                      : "bg-white text-slate-600 hover:text-slate-950"
-                  }`}
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
-                </Link>
-              );
-            })}
           </div>
         </div>
       </header>
