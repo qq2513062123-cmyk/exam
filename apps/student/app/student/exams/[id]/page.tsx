@@ -8,7 +8,7 @@ import PageIntro from "../../../../components/PageIntro";
 import { Alert } from "../../../../components/ui/alert";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card";
+import { Card, CardContent } from "../../../../components/ui/card";
 import { ErrorState } from "../../../../components/ui/error-state";
 import { LoadingState } from "../../../../components/ui/loading-state";
 import { Textarea } from "../../../../components/ui/textarea";
@@ -29,7 +29,7 @@ function normalizeOptions(options: unknown): Array<{ label: string; value: strin
   if (Array.isArray(options)) {
     return options.map((item, index) => {
       const label = String(item);
-      const match = label.match(/^([A-Za-z])[\.)、\s]/);
+      const match = label.match(/^([A-Za-z])[\.)\s]/);
 
       return {
         label,
@@ -53,6 +53,7 @@ function answersToState(savedAnswers: Array<{ question_id: string; answer: strin
     if (item.answer !== null) {
       result[item.question_id] = item.answer;
     }
+
     return result;
   }, {});
 }
@@ -201,6 +202,7 @@ export default function StudentExamPage() {
 
   async function handleSave() {
     if (!submission || !canEdit) return;
+
     setSaving(true);
     setError("");
     setMessage("");
@@ -308,9 +310,7 @@ export default function StudentExamPage() {
                 onChange={(value) => updateAnswer(question.question_id, value)}
               />
 
-              <p className="mt-4 text-sm text-slate-500">
-                当前答案：{answers[question.question_id] || "未作答"}
-              </p>
+              <p className="mt-4 text-sm text-slate-500">当前答案：{answers[question.question_id] || "未作答"}</p>
             </CardContent>
           </Card>
         ))}

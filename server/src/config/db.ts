@@ -2,8 +2,11 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 
 import { env } from "./env";
 
+const usesRemoteDatabase = !/(localhost|127\.0\.0\.1)/i.test(env.DATABASE_URL);
+
 const pool = new Pool({
-  connectionString: env.DATABASE_URL
+  connectionString: env.DATABASE_URL,
+  ssl: usesRemoteDatabase ? { rejectUnauthorized: false } : undefined
 });
 
 export function query<T extends QueryResultRow = QueryResultRow>(

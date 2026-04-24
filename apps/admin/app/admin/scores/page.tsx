@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BarChart3, CircleAlert } from "lucide-react";
+import { CircleAlert } from "lucide-react";
 
 import PageIntro from "../../../components/PageIntro";
-import { Alert } from "../../../components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
 import { EmptyState } from "../../../components/ui/empty-state";
 import { ErrorState } from "../../../components/ui/error-state";

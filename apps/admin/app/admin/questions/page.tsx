@@ -190,12 +190,7 @@ export default function AdminQuestionsPage() {
 
                 <div className="space-y-2 md:col-span-2">
                   <Label htmlFor="stem">题干</Label>
-                  <Input
-                    id="stem"
-                    value={form.stem}
-                    onChange={(event) => setForm({ ...form, stem: event.target.value })}
-                    required
-                  />
+                  <Input id="stem" value={form.stem} onChange={(event) => setForm({ ...form, stem: event.target.value })} required />
                 </div>
               </div>
 

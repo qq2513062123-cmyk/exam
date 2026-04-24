@@ -41,19 +41,17 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="min-h-screen bg-[#f3f5f7] px-6 py-10">
-      <div className="mx-auto grid min-h-[calc(100vh-80px)] max-w-7xl gap-6 lg:grid-cols-[1.05fr,0.95fr]">
+    <section className="min-h-screen bg-[#f3f5f7] px-4 py-6 sm:px-6">
+      <div className="mx-auto grid max-w-7xl gap-6 lg:min-h-[calc(100vh-48px)] lg:grid-cols-[1.05fr,0.95fr]">
         <div className="rounded-[32px] bg-slate-950 p-8 text-white md:p-10">
-          <div className="flex h-full flex-col justify-between gap-10">
+          <div className="flex h-full min-h-[360px] flex-col justify-between gap-10 lg:min-h-[720px]">
             <div className="space-y-5">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div className="space-y-3">
                 <p className="text-sm font-semibold text-blue-200">Admin Console</p>
-                <h1 className="text-4xl font-semibold leading-tight md:text-5xl">
-                  在线考试管理后台
-                </h1>
+                <h1 className="text-4xl font-semibold leading-tight md:text-5xl">在线考试管理后台</h1>
                 <p className="max-w-xl text-sm leading-7 text-slate-300 md:text-base">
                   统一管理题库、考试、提交记录、人工复核与统计分析，让整个考试组织流程更可控。
                 </p>
@@ -75,8 +73,8 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="flex items-center">
-          <Card className="w-full rounded-[32px] border-slate-200 bg-white shadow-sm">
+        <div className="flex items-center justify-center">
+          <Card className="w-full max-w-xl rounded-[32px] border-slate-200 bg-white shadow-sm">
             <CardHeader className="space-y-3">
               <CardTitle className="text-3xl text-slate-950">管理员登录</CardTitle>
               <CardDescription className="text-base leading-7">

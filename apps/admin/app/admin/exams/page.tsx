@@ -256,7 +256,7 @@ export default function AdminExamsPage() {
               <div className="max-h-56 space-y-2 overflow-auto rounded-2xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500">
                 {questions.map((question) => (
                   <p key={question.id}>
-                    {question.id} · {question.stem}
+                    {question.id} - {question.stem}
                   </p>
                 ))}
               </div>
