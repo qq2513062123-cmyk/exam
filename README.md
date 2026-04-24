@@ -1,10 +1,10 @@
 # 在线考试与管理系统
 
-一个基于 monorepo 的在线考试系统，包含学生端、管理端和 Express 后端，支持登录、考试、判分、复核和统计等完整闭环。本 README 仅聚焦本地启动和部署准备。
+一个基于 monorepo 的在线考试系统，包含学生端、管理端、官网首页和 Express 后端。当前 README 只聚焦部署准备与本地启动。
 
 ## 技术栈
 
-- 前端：Next.js App Router + TypeScript + Tailwind CSS
+- 前端：Next.js + TypeScript + Tailwind CSS
 - 后端：Node.js + Express + PostgreSQL
 - 鉴权：JWT + RBAC
 - 工程：pnpm workspace（monorepo）
@@ -20,7 +20,7 @@ pnpm install
 
 ### 2. 启动数据库（Docker）
 
-首次启动：
+首次运行：
 
 ```bash
 docker run --name exam-system-postgres \
@@ -31,7 +31,7 @@ docker run --name exam-system-postgres \
   -d postgres:16
 ```
 
-如果容器已存在：
+如果容器已经存在：
 
 ```bash
 docker start exam-system-postgres
@@ -60,7 +60,7 @@ docker exec -i exam-system-postgres psql -U postgres -d exam_system < server/src
 pnpm dev:server
 ```
 
-### 6. 启动学生端
+### 6. 启动 student
 
 在 `apps/student/.env.local` 中填写：
 
@@ -68,13 +68,13 @@ pnpm dev:server
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api
 ```
 
-然后启动：
+然后运行：
 
 ```bash
 pnpm dev:student
 ```
 
-### 7. 启动管理端
+### 7. 启动 admin
 
 在 `apps/admin/.env.local` 中填写：
 
@@ -82,18 +82,24 @@ pnpm dev:student
 NEXT_PUBLIC_API_BASE_URL=http://localhost:3001/api
 ```
 
-然后启动：
+然后运行：
 
 ```bash
 pnpm dev:admin
 ```
 
-### 8. 本地访问地址
+### 8. 启动 web
 
-- 官网首页：[http://localhost:3000](http://localhost:3000)
-- 学生端：[http://localhost:3002](http://localhost:3002)
-- 管理端：[http://localhost:3003](http://localhost:3003)
-- 后端健康检查：[http://localhost:3001/api/health](http://localhost:3001/api/health)
+```bash
+pnpm dev:web
+```
+
+### 9. 本地访问地址
+
+- web：首页 `http://localhost:3000`
+- server：健康检查 `http://localhost:3001/api/health`
+- student：`http://localhost:3002/login`
+- admin：`http://localhost:3003/login`
 
 ## 环境变量
 
@@ -122,53 +128,52 @@ NEXT_PUBLIC_API_BASE_URL=
 ### 后端（Railway）
 
 1. 将仓库推送到 GitHub。
-2. 在 Railway 中选择 `Deploy from GitHub repo`。
-3. 选择本仓库。
+2. 在 Railway 中选择 `Deploy from GitHub Repo`。
+3. 选择当前仓库。
 4. 将 `Root Directory` 设置为 `server`。
 5. Railway 会使用：
-   - `build`: `tsc`
-   - `start`: `node dist/server.js`
-6. 在 Railway 项目中设置环境变量：
+   - Build Command：`tsc`
+   - Start Command：`node dist/server.js`
+6. 在 Railway 中设置环境变量：
    - `DATABASE_URL`
    - `JWT_SECRET`
-   - `PORT` 不必手动固定，Railway 会自动注入；本项目已通过 `process.env.PORT` 读取
-7. 部署完成后，记下后端公网地址，例如：
-   - `https://your-api.up.railway.app`
+   - `PORT` 可不手动固定，项目已经通过 `process.env.PORT` 读取
 
-后端当前已经满足 Railway 部署要求：
+当前后端已经满足 Railway 部署要求：
 
-- `server/package.json` 已包含 `build` 和 `start`
+- `server/package.json` 已包含：
+  - `"build": "tsc"`
+  - `"start": "node dist/server.js"`
 - `server/tsconfig.json` 输出目录为 `dist`
 - `server/src/server.ts` 使用 `app.listen(env.PORT)`
-- 未硬编码本地数据库地址
+- 不依赖硬编码本地端口
 
 ### 数据库（Supabase）
 
 1. 在 Supabase 创建 PostgreSQL 项目。
-2. 复制连接字符串，填入 Railway 的 `DATABASE_URL`。
+2. 复制数据库连接串，作为 Railway 的 `DATABASE_URL`。
 3. 打开 Supabase SQL Editor。
-4. 执行：
+4. 依次执行：
    - `server/src/db/migrations/001_init_schema.sql`
    - `server/src/db/seeds/001_seed_profiles.sql`
-5. 确认已创建测试账号和基础表结构。
 
 说明：
 
-- 本项目不修改数据库结构，部署时只需要执行现有 migration 和 seed。
-- 生产环境建议替换默认测试账号密码，或只保留管理员初始化方式。
+- 本项目不修改数据库结构，部署时只执行现有 migration 和 seed。
+- 如果切换到其他 PostgreSQL 服务，步骤相同。
 
 ### 前端（Vercel）
 
 建议在 Vercel 中创建 3 个独立项目。
 
-#### 1. web
+#### web
 
 - Import 同一个 GitHub 仓库
 - Root Directory：`apps/web`
 - Framework Preset：Next.js
 - 无额外环境变量要求
 
-#### 2. student
+#### student
 
 - Import 同一个 GitHub 仓库
 - Root Directory：`apps/student`
@@ -179,7 +184,7 @@ NEXT_PUBLIC_API_BASE_URL=
 NEXT_PUBLIC_API_BASE_URL=https://your-api.up.railway.app/api
 ```
 
-#### 3. admin
+#### admin
 
 - Import 同一个 GitHub 仓库
 - Root Directory：`apps/admin`
@@ -190,36 +195,38 @@ NEXT_PUBLIC_API_BASE_URL=https://your-api.up.railway.app/api
 NEXT_PUBLIC_API_BASE_URL=https://your-api.up.railway.app/api
 ```
 
-说明：
+当前三个前端项目已经满足 Vercel 基本要求：
 
-- `apps/student/package.json`、`apps/admin/package.json`、`apps/web/package.json` 都已包含：
-  - `dev`
-  - `build`
-  - `start`
-- 三个 `next.config.ts` 均为标准空配置，不依赖本地路径
-- student/admin 当前 API 请求统一通过 `process.env.NEXT_PUBLIC_API_BASE_URL`
+- `apps/student/package.json`
+- `apps/admin/package.json`
+- `apps/web/package.json`
+
+均包含：
+
+- `"dev": "next dev ..."`
+- `"build": "next build"`
+
+并且：
+
+- 三个 `next.config.ts` 均为标准配置，不依赖本地路径
+- student / admin API 基址使用 `process.env.NEXT_PUBLIC_API_BASE_URL`
 
 ## 测试账号
 
 - 管理员：`admin@example.com` / `Admin123456`
 - 学生：`student@example.com` / `Student123456`
 
-## 部署后联调建议
+## 部署检查建议
 
-1. 先确认 Railway 后端健康检查可访问：
+上线前建议至少确认以下事项：
+
+1. Railway 健康检查可访问：
    - `https://your-api.up.railway.app/api/health`
-2. 再部署 `student` 和 `admin`
-3. 登录管理端创建题目和考试
-4. 登录学生端完成一次答题和提交
-5. 回到管理端复核简答题
-6. 检查学生历史成绩和后台统计页面
-
-## 当前部署结论
-
-当前项目已经具备基础上线条件：
-
-- 后端可部署到 Railway
-- 数据库可部署到 Supabase
-- 三个前端应用可分别部署到 Vercel
-
-本次仅完成部署准备，没有改业务逻辑、接口或数据库结构。
+2. student 和 admin 环境变量都指向同一个后端地址
+3. 能完成一次完整业务链路：
+   - 管理员登录
+   - 创建题目
+   - 创建并发布考试
+   - 学生登录并提交
+   - 管理员复核
+   - 学生查看历史成绩

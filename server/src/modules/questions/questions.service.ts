@@ -35,6 +35,24 @@ function hasCorrectAnswer(answer: string | null | undefined): boolean {
   return typeof answer === "string" && answer.trim().length > 0;
 }
 
+function normalizeTrueFalseAnswer(answer: string | null | undefined): string | null | undefined {
+  if (answer === undefined || answer === null) {
+    return answer;
+  }
+
+  const normalized = answer.trim().toLowerCase();
+
+  if (normalized === "正确" || normalized === "对" || normalized === "true") {
+    return "true";
+  }
+
+  if (normalized === "错误" || normalized === "错" || normalized === "false") {
+    return "false";
+  }
+
+  return answer;
+}
+
 function validateQuestionRules(input: QuestionDraft): void {
   if (input.score < 0) {
     throw new AppError("score must be greater than or equal to 0", 400);
@@ -51,10 +69,24 @@ function validateQuestionRules(input: QuestionDraft): void {
   }
 
   if (input.type === "true_false") {
-    if (input.correct_answer !== "true" && input.correct_answer !== "false") {
-      throw new AppError('true_false correct_answer must be "true" or "false"', 400);
+    const validTrueFalseAnswers = new Set(["true", "false", "正确", "错误"]);
+
+    if (!validTrueFalseAnswers.has(input.correct_answer ?? "")) {
+      throw new AppError('true_false correct_answer must be "true", "false", "正确" or "错误"', 400);
     }
   }
+}
+
+function serializeOptions(options: unknown | null | undefined) {
+  if (options === undefined) {
+    return undefined;
+  }
+
+  if (options === null) {
+    return null;
+  }
+
+  return JSON.stringify(options);
 }
 
 export async function listQuestions(type?: QuestionType): Promise<Question[]> {
@@ -84,7 +116,12 @@ export async function listQuestions(type?: QuestionType): Promise<Question[]> {
 }
 
 export async function createQuestion(input: CreateQuestionInput): Promise<Question> {
-  validateQuestionRules(input);
+  const normalizedInput = {
+    ...input,
+    correct_answer: input.type === "true_false" ? normalizeTrueFalseAnswer(input.correct_answer) : input.correct_answer
+  };
+
+  validateQuestionRules(normalizedInput);
 
   const result = await query<Question>(
     `
@@ -93,12 +130,12 @@ export async function createQuestion(input: CreateQuestionInput): Promise<Questi
       RETURNING id, type, stem, options, correct_answer, score, created_by, created_at, updated_at
     `,
     [
-      input.type,
-      input.stem,
-      input.options ?? null,
-      input.correct_answer ?? null,
-      input.score,
-      input.created_by
+      normalizedInput.type,
+      normalizedInput.stem,
+      serializeOptions(normalizedInput.options) ?? null,
+      normalizedInput.correct_answer ?? null,
+      normalizedInput.score,
+      normalizedInput.created_by
     ]
   );
 
@@ -140,7 +177,12 @@ export async function updateQuestion(
     score: input.score ?? current.score
   };
 
-  validateQuestionRules(next);
+  const normalizedNext = {
+    ...next,
+    correct_answer: next.type === "true_false" ? normalizeTrueFalseAnswer(next.correct_answer) : next.correct_answer
+  };
+
+  validateQuestionRules(normalizedNext);
 
   const result = await query<Question>(
     `
@@ -154,7 +196,14 @@ export async function updateQuestion(
       WHERE id = $6
       RETURNING id, type, stem, options, correct_answer, score, created_by, created_at, updated_at
     `,
-    [next.type, next.stem, next.options ?? null, next.correct_answer ?? null, next.score, id]
+    [
+      normalizedNext.type,
+      normalizedNext.stem,
+      serializeOptions(normalizedNext.options) ?? null,
+      normalizedNext.correct_answer ?? null,
+      normalizedNext.score,
+      id
+    ]
   );
 
   return result.rows[0];

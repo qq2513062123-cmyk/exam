@@ -5,7 +5,7 @@ export type StudentUser = {
   name: string | null;
 };
 
-type LoginResponse = {
+type AuthResponse = {
   success: boolean;
   message: string;
   data?: {
@@ -14,11 +14,26 @@ type LoginResponse = {
   };
 };
 
+type AuthPayload = {
+  token: string;
+  user: StudentUser;
+};
+
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001/api";
 
 const TOKEN_KEY = "student_token";
 const USER_KEY = "student_user";
+
+async function parseAuthResponse(response: Response): Promise<AuthPayload> {
+  const result = (await response.json()) as AuthResponse;
+
+  if (!response.ok || !result.success || !result.data) {
+    throw new Error(result.message || "请求失败");
+  }
+
+  return result.data;
+}
 
 export async function loginStudent(email: string, password: string) {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -29,13 +44,19 @@ export async function loginStudent(email: string, password: string) {
     body: JSON.stringify({ email, password })
   });
 
-  const result = (await response.json()) as LoginResponse;
+  return parseAuthResponse(response);
+}
 
-  if (!response.ok || !result.success || !result.data) {
-    throw new Error(result.message || "登录失败");
-  }
+export async function registerStudent(name: string, email: string, password: string) {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, email, password })
+  });
 
-  return result.data;
+  return parseAuthResponse(response);
 }
 
 export function saveAuth(token: string, user: StudentUser): void {

@@ -3,52 +3,52 @@
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, BookOpenCheck, CheckCircle2, Clock3, FileText } from "lucide-react";
+import { ArrowRight, BookOpenCheck, ShieldCheck, UserPlus } from "lucide-react";
 
 import { Alert } from "../../components/ui/alert";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
-import { loginStudent, saveAuth } from "../../lib/auth";
+import { registerStudent, saveAuth } from "../../lib/auth";
 
-const highlights = [
+const features = [
   {
-    icon: Clock3,
-    label: "保存并继续",
-    title: "断点续答",
-    description: "已保存的答案会在刷新后自动回填，减少重复操作。"
+    icon: UserPlus,
+    title: "学生自助注册",
+    description: "外部用户可以自行创建学生账号，并在注册后直接进入考试列表。"
   },
   {
-    icon: FileText,
-    label: "提交后可查",
-    title: "成绩追踪",
-    description: "历史成绩页会展示总分、客观题得分和主观题状态。"
+    icon: ShieldCheck,
+    title: "角色固定为 student",
+    description: "注册接口不允许传 role，后端会强制按 student 创建账号。"
   }
 ];
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("student@example.com");
-  const [password, setPassword] = useState("Student123456");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+
+    if (password !== confirmPassword) {
+      setError("两次输入的密码不一致。");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const { token, user } = await loginStudent(email, password);
-
-      if (user.role !== "student") {
-        setError("当前账号不是学生角色，不能进入学生端。");
-        return;
-      }
-
+      const { token, user } = await registerStudent(name, email, password);
       saveAuth(token, user);
       router.push("/student/exams");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "登录失败");
+      setError(err instanceof Error ? err.message : "注册失败");
     } finally {
       setLoading(false);
     }
@@ -73,27 +73,21 @@ export default function LoginPage() {
 
               <div className="max-w-xl space-y-5">
                 <span className="inline-flex items-center rounded-full border border-white/10 bg-white/8 px-4 py-2 text-xs font-medium text-slate-200">
-                  作答、保存、提交与历史成绩统一在同一入口完成
+                  新用户可直接注册并进入考试系统
                 </span>
                 <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight md:text-6xl">
-                  更专注的考试体验，
+                  创建学生账号，
                   <br />
-                  更清楚的作答流程。
+                  然后直接开始考试。
                 </h1>
                 <p className="max-w-2xl text-base leading-8 text-slate-300 md:text-lg">
-                  进入考试列表、保存答案、刷新回填，并在交卷后查看自己的历史成绩。界面保持克制，重点只留给真正需要的操作。
+                  这里只提供学生自助注册。注册成功后会自动登录，并跳转到考试列表页面，不需要再重复填写登录信息。
                 </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3 text-sm text-slate-300">
-                <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">考试列表清晰可读</div>
-                <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">已保存答案自动回显</div>
-                <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2">提交后成绩状态可追踪</div>
               </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              {highlights.map((item) => {
+              {features.map((item) => {
                 const Icon = item.icon;
 
                 return (
@@ -101,11 +95,8 @@ export default function LoginPage() {
                     key={item.title}
                     className="rounded-[28px] border border-white/10 bg-white/5 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
-                        <Icon className="h-5 w-5 text-blue-200" />
-                      </div>
-                      <span className="text-sm text-slate-300">{item.label}</span>
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10">
+                      <Icon className="h-5 w-5 text-blue-200" />
                     </div>
                     <h2 className="mt-5 text-2xl font-semibold text-white">{item.title}</h2>
                     <p className="mt-3 text-sm leading-7 text-slate-300">{item.description}</p>
@@ -120,17 +111,28 @@ export default function LoginPage() {
           <div className="w-full max-w-[520px] rounded-[32px] border border-slate-200 bg-white/95 p-8 shadow-[0_28px_70px_rgba(15,23,42,0.12)] backdrop-blur sm:p-9">
             <div className="space-y-4">
               <div className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600">
-                学生账号登录
+                学生账号注册
               </div>
               <div className="space-y-2">
-                <h2 className="text-4xl font-semibold tracking-tight text-slate-950">欢迎回来</h2>
+                <h2 className="text-4xl font-semibold tracking-tight text-slate-950">创建新账号</h2>
                 <p className="text-base leading-7 text-slate-600">
-                  使用学生账号进入考试系统，继续作答、提交试卷并查看历史成绩。
+                  填写姓名、邮箱和密码，注册成功后会自动进入学生考试列表。
                 </p>
               </div>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="name">姓名</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  required
+                  className="h-12 rounded-2xl border-slate-200 bg-slate-50/70 px-4 text-base focus:bg-white"
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email">邮箱</Label>
                 <Input
@@ -151,6 +153,20 @@ export default function LoginPage() {
                   value={password}
                   onChange={(event) => setPassword(event.target.value)}
                   required
+                  minLength={8}
+                  className="h-12 rounded-2xl border-slate-200 bg-slate-50/70 px-4 text-base focus:bg-white"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">确认密码</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(event) => setConfirmPassword(event.target.value)}
+                  required
+                  minLength={8}
                   className="h-12 rounded-2xl border-slate-200 bg-slate-50/70 px-4 text-base focus:bg-white"
                 />
               </div>
@@ -162,26 +178,16 @@ export default function LoginPage() {
                 disabled={loading}
                 className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-slate-950 px-5 text-base font-semibold text-white shadow-[0_14px_30px_rgba(15,23,42,0.18)] transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                <span>{loading ? "登录中..." : "进入学生端"}</span>
+                <span>{loading ? "注册中..." : "创建学生账号"}</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </form>
 
             <div className="mt-5 text-sm text-slate-600">
-              没有账号？
-              <Link href="/register" className="ml-2 font-medium text-slate-950 underline-offset-4 hover:underline">
-                去注册
+              已有账号？
+              <Link href="/login" className="ml-2 font-medium text-slate-950 underline-offset-4 hover:underline">
+                去登录
               </Link>
-            </div>
-
-            <div className="mt-6 rounded-[24px] border border-slate-200 bg-slate-50/80 px-4 py-4">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="mt-0.5 h-5 w-5 text-emerald-600" />
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-slate-900">默认测试账号已预填</p>
-                  <p className="text-sm leading-6 text-slate-600">你可以直接点击登录，验证考试链路是否通畅。</p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
