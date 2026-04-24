@@ -3,10 +3,12 @@ import { ensureDatabaseSetup } from "./config/db";
 import { env } from "./config/env";
 
 async function bootstrap(): Promise<void> {
-  await ensureDatabaseSetup();
-
   app.listen(env.PORT, () => {
     console.log(`Server is running on port ${env.PORT}`);
+  });
+
+  ensureDatabaseSetup().catch((error) => {
+    console.error("Database setup failed", error);
   });
 }
 

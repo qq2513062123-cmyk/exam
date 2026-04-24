@@ -9,7 +9,9 @@ const usesRemoteDatabase = !/(localhost|127\.0\.0\.1)/i.test(env.DATABASE_URL);
 
 const pool = new Pool({
   connectionString: env.DATABASE_URL,
-  ssl: usesRemoteDatabase ? { rejectUnauthorized: false } : undefined
+  ssl: usesRemoteDatabase ? { rejectUnauthorized: false } : undefined,
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000
 });
 
 export function query<T extends QueryResultRow = QueryResultRow>(
