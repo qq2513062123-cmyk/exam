@@ -89,7 +89,18 @@ export default function StudentExamsPage() {
       {!loading && !error && exams.length > 0 ? (
         <div className="grid gap-5">
           {exams.map((exam) => (
-            <Card key={exam.id} className="rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
+            <Card
+              key={exam.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => router.push(`/student/exams/${exam.id}`)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  router.push(`/student/exams/${exam.id}`);
+                }
+              }}
+              className="cursor-pointer rounded-[30px] border-slate-200 bg-white/95 shadow-[0_20px_50px_rgba(15,23,42,0.08)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-[0_24px_60px_rgba(15,23,42,0.12)]"
+            >
               <CardHeader className="space-y-5">
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="max-w-3xl space-y-4">
@@ -110,8 +121,14 @@ export default function StudentExamsPage() {
               </CardHeader>
 
               <CardContent className="flex justify-end pt-0">
-                <Button className="h-12 rounded-2xl px-5" onClick={() => router.push(`/student/exams/${exam.id}`)}>
-                  进入考试
+                <Button
+                  className="h-12 rounded-2xl px-5"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    router.push(`/student/exams/${exam.id}`);
+                  }}
+                >
+                  开始 / 继续考试
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </CardContent>

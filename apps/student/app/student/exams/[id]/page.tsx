@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { AlertTriangle, Clock3, FileText, Save, SendHorizonal } from "lucide-react";
 
@@ -63,6 +63,15 @@ function statusVariant(status?: Submission["status"]) {
   if (status === "pending_review") return "warning" as const;
   if (status === "in_progress") return "default" as const;
   return "secondary" as const;
+}
+
+function formatRemainingTime(milliseconds: number) {
+  const safeMilliseconds = Math.max(0, milliseconds);
+  const totalSeconds = Math.floor(safeMilliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
 function QuestionInput({
@@ -159,8 +168,23 @@ export default function StudentExamPage() {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [now, setNow] = useState(Date.now());
+  const autoSubmittedRef = useRef(false);
 
   const canEdit = submission?.status === "in_progress";
+
+  const remainingMilliseconds = useMemo(() => {
+    if (!submission || !exam) {
+      return null;
+    }
+
+    const startedAt = new Date(submission.started_at).getTime();
+    const durationMilliseconds = exam.duration_minutes * 60 * 1000;
+
+    return startedAt + durationMilliseconds - now;
+  }, [exam, now, submission]);
+
+  const timeExpired = remainingMilliseconds !== null && remainingMilliseconds <= 0;
 
   const answerPayload = useMemo(
     () =>
@@ -196,6 +220,23 @@ export default function StudentExamPage() {
     loadExam();
   }, [examId]);
 
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setNow(Date.now());
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!submission || !canEdit || !timeExpired || autoSubmittedRef.current) {
+      return;
+    }
+
+    autoSubmittedRef.current = true;
+    void handleSubmit(true);
+  }, [canEdit, submission, timeExpired]);
+
   function updateAnswer(questionId: string, value: string) {
     setAnswers((current) => ({ ...current, [questionId]: value }));
   }
@@ -218,13 +259,13 @@ export default function StudentExamPage() {
     }
   }
 
-  async function handleSubmit() {
+  async function handleSubmit(autoSubmit = false) {
     if (!submission || !canEdit) return;
-    if (!window.confirm("确认提交试卷？提交后将不能再修改答案。")) return;
+    if (!autoSubmit && !window.confirm("确认提交试卷？提交后将不能再修改答案。")) return;
 
     setSubmitting(true);
     setError("");
-    setMessage("");
+    setMessage(autoSubmit ? "考试时间已到，正在自动提交试卷。" : "");
 
     try {
       await saveSubmissionAnswers(submission.id, answerPayload);
@@ -270,14 +311,25 @@ export default function StudentExamPage() {
                 共 {exam.questions.length} 题
               </span>
             </div>
-            <Badge variant={statusVariant(submission?.status)}>{submission?.status || "unknown"}</Badge>
+            <div className="flex flex-wrap items-center gap-3">
+              {remainingMilliseconds !== null ? (
+                <div className={`rounded-2xl border px-4 py-2 text-sm font-semibold ${
+                  timeExpired
+                    ? "border-red-200 bg-red-50 text-red-700"
+                    : "border-blue-100 bg-blue-50 text-blue-700"
+                }`}>
+                  剩余 {formatRemainingTime(remainingMilliseconds)}
+                </div>
+              ) : null}
+              <Badge variant={statusVariant(submission?.status)}>{submission?.status || "unknown"}</Badge>
+            </div>
           </CardContent>
         </Card>
 
         <Card className="rounded-[30px] border-slate-200 bg-white/90 shadow-[0_20px_50px_rgba(15,23,42,0.08)]">
           <CardContent className="p-6 text-sm leading-7 text-slate-600">
             {canEdit
-              ? "你可以先保存当前答案，再在确认无误后正式提交试卷。"
+              ? "进入考试后开始计时。你可以先保存当前答案，倒计时结束后系统会自动提交。"
               : `当前试卷状态为 ${submission?.status || "unknown"}，页面仅显示答案内容，不再允许修改。`}
           </CardContent>
         </Card>
@@ -316,7 +368,7 @@ export default function StudentExamPage() {
               <QuestionInput
                 question={question}
                 value={answers[question.question_id] || ""}
-                disabled={!canEdit}
+                disabled={!canEdit || timeExpired}
                 onChange={(value) => updateAnswer(question.question_id, value)}
               />
 
@@ -329,14 +381,16 @@ export default function StudentExamPage() {
       <Card className="sticky bottom-4 rounded-[30px] border-slate-200 bg-white/95 shadow-[0_18px_50px_rgba(15,23,42,0.12)] backdrop-blur">
         <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-slate-500">
-            {canEdit ? "可以先保存答案，再正式提交试卷。" : "当前试卷已锁定，不能继续编辑。"}
+            {canEdit
+              ? `剩余 ${remainingMilliseconds === null ? "--:--" : formatRemainingTime(remainingMilliseconds)}，可以先保存答案，再正式提交试卷。`
+              : "当前试卷已锁定，不能继续编辑。"}
           </p>
           <div className="flex gap-3">
-            <Button variant="outline" onClick={handleSave} disabled={!canEdit || saving || submitting}>
+            <Button variant="outline" onClick={handleSave} disabled={!canEdit || timeExpired || saving || submitting}>
               <Save className="h-4 w-4" />
               {saving ? "保存中..." : "保存答案"}
             </Button>
-            <Button onClick={handleSubmit} disabled={!canEdit || saving || submitting}>
+            <Button onClick={() => void handleSubmit(false)} disabled={!canEdit || saving || submitting}>
               <SendHorizonal className="h-4 w-4" />
               {submitting ? "提交中..." : "提交试卷"}
             </Button>
